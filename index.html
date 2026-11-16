@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Human Loop: Visual Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0f13; --panel:#16181f; --line:#262a35; --ink:#f3f1ec; --mute:#9aa0ad;
+    --accent:#ff6a3d; --accent2:#7c8cff; --mint:#5fe0b0; --sun:#ffd25e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:56px 28px 96px}
+  header{margin-bottom:56px}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(44px,7vw,84px);line-height:1;margin:14px 0 18px}
+  h1 em{color:var(--accent)}
+  .lede{color:var(--mute);max-width:640px;font-size:17px}
+  nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+  nav a{color:var(--ink);text-decoration:none;font-size:13px;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;margin-bottom:36px;overflow:hidden;scroll-margin-top:20px}
+  .card-head{display:flex;gap:18px;align-items:baseline;padding:26px 30px 0}
+  .num{font-family:"Instrument Serif",serif;font-size:44px;color:var(--accent);line-height:1}
+  .card-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+  .card-head p{color:var(--mute);font-size:14px;margin-top:2px}
+  .stage{margin:22px 30px;background:#0b0c10;border:1px solid var(--line);border-radius:14px;min-height:340px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:24px}
+  .notes{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 30px 28px}
+  .note{font-size:14px;color:var(--mute)}
+  .note b{display:block;color:var(--ink);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+  @media(max-width:720px){.notes{grid-template-columns:1fr}.card-head{padding:22px 20px 0}.stage{margin:18px 20px}.notes{padding:0 20px 22px}}
+  button.replay{position:absolute;right:12px;bottom:12px;background:transparent;border:1px solid var(--line);color:var(--mute);font:600 12px Inter;padding:6px 10px;border-radius:8px;cursor:pointer}
+  button.replay:hover{color:var(--ink);border-color:var(--mute)}
+
+  /* 1 morph loops */
+  .twin{display:flex;gap:48px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .loop{position:relative;width:260px;height:260px}
+  .loop svg{position:absolute;inset:0}
+  .loop .node{position:absolute;width:110px;text-align:center;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  .loop .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .swap{position:relative;display:inline-block;height:1.3em;width:100%}
+  .swap span{position:absolute;left:0;right:0;transition:opacity .8s}
+  .swap .b{opacity:0}
+  .morphed .swap .a{opacity:0}.morphed .swap .b{opacity:1}
+  .center .big{font-family:"Instrument Serif",serif;font-size:30px;text-transform:none;letter-spacing:0}
+  .spin{transform-origin:130px 130px;animation:spin 8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .twin-caption{text-align:center;margin-top:22px;font-family:"Instrument Serif",serif;font-size:26px}
+  .twin-caption em{color:var(--accent)}
+
+  /* 2 gap chart */
+  .chart{width:100%;max-width:760px}
+  .draw{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.4s ease-out forwards}
+  .fadein{opacity:0;animation:fade 1s 2s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fade{to{opacity:1}}
+
+  /* 3 blur */
+  .blurbox{text-align:center;max-width:780px}
+  .lapchip{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--bg);background:var(--sun);padding:4px 10px;border-radius:999px;margin-bottom:22px}
+  .ps{font-family:"Instrument Serif",serif;font-size:clamp(26px,4vw,42px);line-height:1.2;transition:filter 1s, opacity .5s}
+  .ps-label{color:var(--mute);font-size:13px;margin-top:18px;letter-spacing:.08em;text-transform:uppercase}
+  .dots{display:flex;gap:8px;justify-content:center;margin-top:16px}
+  .dots i{width:28px;height:4px;border-radius:2px;background:var(--line);transition:background .4s}
+  .dots i.on{background:var(--sun)}
+
+  /* 5 lap counter */
+  .counter{display:flex;flex-direction:column;align-items:center;gap:26px}
+  .lapnum{font-family:Inter;font-weight:800;font-size:clamp(70px,12vw,140px);letter-spacing:-.04em;line-height:.9;font-variant-numeric:tabular-nums}
+  .lapnum small{font-size:.3em;letter-spacing:.2em;color:var(--mute);display:block;text-align:center;font-weight:700}
+  .moves{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .moves span{border:1px solid var(--line);padding:10px 16px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:.08em;color:var(--mute);transition:all .3s}
+  .moves span.on{background:var(--accent);border-color:var(--accent);color:#120a06;transform:translateY(-3px)}
+  .strapline{font-family:"Instrument Serif",serif;font-size:24px;text-align:center}
+  .strapline em{color:var(--accent)}
+
+  /* 7 then/now */
+  .tn{width:100%;max-width:820px;display:grid;gap:34px}
+  .row-label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--mute);margin-bottom:10px}
+  .pin{animation:pinfade 5s ease-in infinite}
+  @keyframes pinfade{0%,25%{opacity:1}100%{opacity:.08}}
+  .rot{transform-box:fill-box;transform-origin:center;animation:spin 3s linear infinite}
+
+  /* 8 stickies */
+  .stickies{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:900px}
+  .sticky{width:160px;height:160px;padding:16px;font-family:Caveat,cursive;font-size:21px;line-height:1.1;color:#2a2400;box-shadow:0 10px 24px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;transform:scale(1.6) rotate(var(--r));animation:slap .35s cubic-bezier(.2,1.4,.4,1) forwards;animation-delay:var(--d)}
+  @keyframes slap{to{opacity:1;transform:scale(1) rotate(var(--r))}}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}
+    .draw{stroke-dashoffset:0}.fadein,.sticky{opacity:1}
+  }
+  footer{color:var(--mute);font-size:13px;text-align:center;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Config pitch · Visual concepts</div>
+    <h1>The <em>Human</em> Loop</h1>
+    <p class="lede">Eight visual ideas for the Continuous Strategy talk. Each card shows the visual, the line it backs up, and where it fits in the talk. These are concepts to react to, not final slides.</p>
+    <nav>
+      <a href="#v1">1 · Same loop</a><a href="#v2">2 · Understanding gap</a><a href="#v3">3 · Blurry to sharp</a><a href="#v4">4 · The spiral</a>
+      <a href="#v5">5 · Lap counter</a><a href="#v6">6 · The ring</a><a href="#v7">7 · Then vs. now</a><a href="#v8">8 · Loop laws</a>
+    </nav>
+  </header>
+
+  <!-- 1 -->
+  <section class="card" id="v1">
+    <div class="card-head"><div class="num">01</div><div><h2>Same loop, different model</h2><p>An AI training loop morphs into the Human Loop.</p></div></div>
+    <div class="stage" style="flex-direction:column">
+      <div class="twin" id="twin">
+        <div class="loop">
+          <svg viewBox="0 0 260 260"><circle cx="130" cy="130" r="96" fill="none" stroke="#262a35" stroke-width="2"/>
+            <g class="spin"><circle cx="130" cy="34" r="7" fill="#7c8cff"/></g></svg>
+          <div class="node" style="left:75px;top:2px"><span class="swap"><span class="a" style="color:#7c8cff">Data</span><span class="b" style="color:#ff6a3d">Obsess</span></span></div>
+          <div class="node" style="right:-48px;top:118px"><span class="swap"><span class="a" style="color:#7c8cff">Train</span><span class="b" style="color:#ff6a3d">Solve</span></span></div>
+          <div class="node" style="left:75px;bottom:2px"><span class="swap"><span class="a" style="color:#7c8cff">Evaluate</span><span class="b" style="color:#ff6a3d">Hand it back</span></span></div>
+          <div class="node" style="left:-48px;top:118px"><span class="swap"><span class="a" style="color:#7c8cff">Update</span><span class="b" style="color:#ff6a3d">Again</span></span></div>
+          <div class="center"><div class="node" style="position:static;width:auto;color:var(--mute);font-size:11px">Improving the</div><div class="big"><span class="swap" style="width:130px;text-align:center"><span class="a">model</span><span class="b">strategy</span></span></div></div>
+        </div>
+      </div>
+      <div class="twin-caption">We're not training a model. <em>We're training the strategy.</em></div>
+      <button class="replay" onclick="document.getElementById('twin').classList.toggle('morphed')">Morph</button>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>"Recursive self-improvement... designers could learn a thing or two from it." Then the framework's hook.</div>
+      <div class="note"><b>Where it goes</b>The opening of the Config talk, right as you introduce the Human Loop. The labels switch from AI terms to design terms by themselves every few seconds.</div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="card" id="v2">
+    <div class="card-head"><div class="num">02</div><div><h2>The understanding gap</h2><p>Building speed rockets up. Understanding stays flat.</p></div></div>
+    <div class="stage">
+      <svg class="chart" viewBox="0 0 760 340" id="gapchart">
+        <line x1="60" y1="290" x2="730" y2="290" stroke="#262a35" stroke-width="2"/>
+        <line x1="60" y1="30" x2="60" y2="290" stroke="#262a35" stroke-width="2"/>
+        <text x="64" y="318" fill="#9aa0ad" font-size="13" font-family="Inter">Before AI</text>
+        <text x="660" y="318" fill="#9aa0ad" font-size="13" font-family="Inter">Now</text>
+        <path class="fadein" d="M60,240 C260,236 420,220 560,140 S700,40 730,36 L730,232 C560,232 300,238 60,240 Z" fill="#ff6a3d" fill-opacity=".16"/>
+        <path class="draw" d="M60,240 C260,236 420,220 560,140 S700,40 730,36" fill="none" stroke="#ff6a3d" stroke-width="5" stroke-linecap="round"/>
+        <path class="draw" d="M60,240 C300,238 560,234 730,232" fill="none" stroke="#5fe0b0" stroke-width="5" stroke-linecap="round"/>
+        <text x="600" y="30" fill="#ff6a3d" font-size="16" font-weight="700" font-family="Inter">How fast we build</text>
+        <text x="540" y="262" fill="#5fe0b0" font-size="16" font-weight="700" font-family="Inter">How fast we understand</text>
+        <text class="fadein" x="330" y="215" fill="#f3f1ec" font-size="28" font-family="Instrument Serif" font-style="italic">the understanding gap</text>
+      </svg>
+      <button class="replay" onclick="replay('gapchart')">Replay</button>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>"Now AI lets us do it ten times faster. Everyone's telling us to move faster. Nobody's asking: faster toward what?"</div>
+      <div class="note"><b>Where it goes</b>End of your open, or the start of Ryana's "the shift." This is the problem slide. Shows the villain without naming anyone.</div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="card" id="v3">
+    <div class="card-head"><div class="num">03</div><div><h2>Blurry to sharp</h2><p>The problem statement comes into focus a little more each lap.</p></div></div>
+    <div class="stage">
+      <div class="blurbox">
+        <div class="lapchip" id="blurLap">LAP 1</div>
+        <div class="ps" id="ps">"Users want a better dashboard."</div>
+        <div class="ps-label">Our problem statement</div>
+        <div class="dots" id="blurDots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>"Every lap, the strategy gets sharper." Makes the abstract idea literal.</div>
+      <div class="note"><b>Where it goes</b>Your loop section, during "That's continuous user research cycles." Swap in a real example from your own work or Ryana's story if you can.</div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="card" id="v4">
+    <div class="card-head"><div class="num">04</div><div><h2>The spiral</h2><p>Not a flat circle. A loop that tightens toward the right problem.</p></div></div>
+    <div class="stage">
+      <svg viewBox="0 0 680 340" style="width:100%;max-width:720px">
+        <defs><radialGradient id="bull"><stop offset="0" stop-color="#ff6a3d"/><stop offset="1" stop-color="#ff6a3d" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="300" cy="170" r="150" fill="none" stroke="#262a35" stroke-width="2"/>
+        <circle cx="300" cy="170" r="120" fill="none" stroke="#2f3442" stroke-width="2"/>
+        <circle cx="300" cy="170" r="90" fill="none" stroke="#3a4152" stroke-width="2"/>
+        <circle cx="300" cy="170" r="60" fill="none" stroke="#4a5368" stroke-width="2"/>
+        <circle cx="300" cy="170" r="30" fill="url(#bull)"/>
+        <circle cx="300" cy="170" r="6" fill="#ff6a3d"/>
+        <text x="300" y="14" text-anchor="middle" fill="#9aa0ad" font-size="12" font-family="Inter" font-weight="700" letter-spacing="2">LAP 1</text>
+        <text x="300" y="44" text-anchor="middle" fill="#9aa0ad" font-size="12" font-family="Inter" font-weight="700" letter-spacing="2">LAP 2</text>
+        <text x="300" y="74" text-anchor="middle" fill="#9aa0ad" font-size="12" font-family="Inter" font-weight="700" letter-spacing="2">LAP 3</text>
+        <text x="300" y="104" text-anchor="middle" fill="#9aa0ad" font-size="12" font-family="Inter" font-weight="700" letter-spacing="2">LAP 4</text>
+        <path id="spiralPath" fill="none" stroke="#ffd25e" stroke-width="2" opacity=".55"/>
+        <circle r="8" fill="#ffd25e"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#spiralPath"/></animateMotion></circle>
+        <text x="470" y="176" fill="#f3f1ec" font-size="22" font-family="Instrument Serif" font-style="italic">← the right problem</text>
+      </svg>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>"Then do it again. And again." Each lap isn't repeating, it's converging.</div>
+      <div class="note"><b>Where it goes</b>A good alternative to the plain loop diagram for the framework's "four moves" slide. Shows progress, not just motion.</div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="card" id="v5">
+    <div class="card-head"><div class="num">05</div><div><h2>The lap counter</h2><p>A race-style counter that ticks up as you walk the loop.</p></div></div>
+    <div class="stage">
+      <div class="counter">
+        <div class="lapnum"><small>LAP</small><span id="lapNum">01</span></div>
+        <div class="moves" id="moves"><span>OBSESS</span><span>SOLVE</span><span>HAND IT BACK</span><span>AGAIN</span></div>
+        <div class="strapline">Strategy isn't a phase anymore. <em>It's a lap counter.</em></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>"Strategy isn't a phase anymore. It's a lap counter." The memorable line from the framework.</div>
+      <div class="note"><b>Where it goes</b>Could live in the corner of every framework slide, ticking up as you present each move. Also works as the video's end card.</div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="card" id="v6">
+    <div class="card-head"><div class="num">06</div><div><h2>The ring</h2><p>The loop runs in the middle. Design holds the ring around it.</p></div></div>
+    <div class="stage">
+      <svg viewBox="0 0 600 400" style="width:100%;max-width:640px">
+        <circle cx="300" cy="200" r="170" fill="none" stroke="#7c8cff" stroke-width="22" opacity=".18"/>
+        <circle cx="300" cy="200" r="170" fill="none" stroke="#7c8cff" stroke-width="2" stroke-dasharray="4 8"/>
+        <circle cx="300" cy="200" r="92" fill="none" stroke="#ff6a3d" stroke-width="3"/>
+        <g class="spin" style="transform-origin:300px 200px;animation-duration:6s"><circle cx="300" cy="108" r="7" fill="#ff6a3d"/></g>
+        <g font-family="Inter" font-weight="700" font-size="12" letter-spacing="1.5" text-anchor="middle" fill="#ff6a3d">
+          <text x="300" y="140">OBSESS</text><text x="350" y="204">SOLVE</text><text x="300" y="262">HAND IT BACK</text><text x="250" y="204">AGAIN</text>
+        </g>
+        <g font-family="Inter" font-weight="700" font-size="13" text-anchor="middle" fill="#c9cfff">
+          <text x="300" y="22">DEEP COLLABORATION</text>
+          <text x="512" y="320">SHARED FRAMEWORKS</text>
+          <text x="88" y="320">SYSTEMS THINKING</text>
+        </g>
+        <g font-family="Inter" font-weight="800" font-size="14" text-anchor="middle">
+          <circle cx="153" cy="110" r="22" fill="#16181f" stroke="#5fe0b0" stroke-width="2"/><text x="153" y="115" fill="#5fe0b0">P</text>
+          <circle cx="447" cy="110" r="22" fill="#16181f" stroke="#5fe0b0" stroke-width="2"/><text x="447" y="115" fill="#5fe0b0">T</text>
+          <circle cx="300" cy="370" r="22" fill="#16181f" stroke="#5fe0b0" stroke-width="2"/><text x="300" y="375" fill="#5fe0b0">D</text>
+        </g>
+      </svg>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>Ryana's section: deep collaboration, co-creation, design leading the problem-solving frameworks, systems-level thinking.</div>
+      <div class="note"><b>Where it goes</b>Ryana's "design's new job" moment. Product, tech and design sit on the ring together, so it reads as co-created, not design taking over.</div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="card" id="v7">
+    <div class="card-head"><div class="num">07</div><div><h2>Strategy then vs. now</h2><p>One kickoff that fades away, versus a loop that never stops.</p></div></div>
+    <div class="stage">
+      <div class="tn">
+        <div>
+          <div class="row-label">Then: strategy as a phase</div>
+          <svg viewBox="0 0 800 70" style="width:100%">
+            <line x1="10" y1="40" x2="790" y2="40" stroke="#262a35" stroke-width="3"/>
+            <g class="pin"><circle cx="70" cy="40" r="10" fill="#9aa0ad"/><text x="70" y="18" text-anchor="middle" fill="#9aa0ad" font-family="Inter" font-size="13" font-weight="700">KICKOFF DECK</text></g>
+            <text x="790" y="66" text-anchor="end" fill="#4a5368" font-family="Inter" font-size="12">launch... and hope</text>
+          </svg>
+        </div>
+        <div>
+          <div class="row-label" style="color:var(--accent)">Now: strategy is continuous</div>
+          <svg viewBox="0 0 800 80" style="width:100%">
+            <line x1="10" y1="40" x2="790" y2="40" stroke="#ff6a3d" stroke-width="3" opacity=".35"/>
+            <g fill="none" stroke="#ff6a3d" stroke-width="3">
+              <circle class="rot" cx="80" cy="40" r="22" stroke-dasharray="100 40"/>
+              <circle class="rot" cx="210" cy="40" r="22" stroke-dasharray="100 40"/>
+              <circle class="rot" cx="340" cy="40" r="22" stroke-dasharray="100 40"/>
+              <circle class="rot" cx="470" cy="40" r="22" stroke-dasharray="100 40"/>
+              <circle class="rot" cx="600" cy="40" r="22" stroke-dasharray="100 40"/>
+              <circle class="rot" cx="730" cy="40" r="22" stroke-dasharray="100 40"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>Ryana: "Strategy used to be a phase. A kickoff, a deck, done. Now strategy has to be continuous."</div>
+      <div class="note"><b>Where it goes</b>Right on that line in the video. Probably the single most important visual for the pitch, since it is the title of the talk.</div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="card" id="v8">
+    <div class="card-head"><div class="num">08</div><div><h2>The loop laws</h2><p>Five sticky notes slapped on screen, one at a time.</p></div></div>
+    <div class="stage" id="stickStage">
+      <div class="stickies" id="stickies">
+        <div class="sticky" style="background:#ffd25e;--r:-4deg;--d:.2s">Talk to a human before you touch a tool.</div>
+        <div class="sticky" style="background:#ffb38a;--r:3deg;--d:.7s">A prototype is a question.</div>
+        <div class="sticky" style="background:#b8f2d8;--r:-2deg;--d:1.2s">Users vote. Stakeholders watch.</div>
+        <div class="sticky" style="background:#c9cfff;--r:4deg;--d:1.7s">Robots do the churning. Humans do the thinking.</div>
+        <div class="sticky" style="background:#ffd25e;--r:-3deg;--d:2.2s">Speed comes after understanding.</div>
+      </div>
+      <button class="replay" onclick="replay('stickies')">Replay</button>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Backs up</b>The loop laws in the framework. The most screenshot-able slide in the talk.</div>
+      <div class="note"><b>Where it goes</b>Near the end of the Config talk, before the Monday morning move. Design these to look good as a social post too.</div>
+    </div>
+  </section>
+
+  <footer>Concepts for Billie &amp; Ryana · Continuous Strategy · Config pitch</footer>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function replay(id){
+    const el = document.getElementById(id);
+    const clone = el.cloneNode(true);
+    el.parentNode.replaceChild(clone, el);
+  }
+
+  // 1: auto morph
+  const twin = document.getElementById('twin');
+  if(!reduce) setInterval(()=>twin.classList.toggle('morphed'), 3200);
+
+  // 4: build a true spiral from the outer ring to the bullseye
+  (function(){
+    const cx=300, cy=170, turns=4, r0=150, r1=6, n=400; let d='';
+    for(let i=0;i<=n;i++){
+      const t=i/n, a=-Math.PI/2 + t*turns*2*Math.PI, r=r0+(r1-r0)*t;
+      d += (i?'L':'M') + (cx+r*Math.cos(a)).toFixed(1) + ',' + (cy+r*Math.sin(a)).toFixed(1);
+    }
+    document.getElementById('spiralPath').setAttribute('d', d);
+  })();
+
+  // 3: blurry to sharp
+  const laps = [
+    {t:'"Users want a better dashboard."', b:7},
+    {t:'"Risk analysts need faster reporting."', b:4},
+    {t:'"Analysts lose days every month rebuilding the same report."', b:1.5},
+    {t:'"Analysts don’t trust last month’s data, so they rebuild every report by hand."', b:0}
+  ];
+  const ps = document.getElementById('ps'), chip = document.getElementById('blurLap'), dots = [...document.querySelectorAll('#blurDots i')];
+  let li = 0;
+  function showLap(){
+    const l = laps[li];
+    ps.style.opacity = 0;
+    setTimeout(()=>{
+      ps.textContent = l.t; ps.style.filter = `blur(${l.b}px)`; ps.style.opacity = 1;
+      chip.textContent = 'LAP ' + (li+1);
+      dots.forEach((d,i)=>d.classList.toggle('on', i<=li));
+    }, reduce ? 0 : 400);
+  }
+  showLap();
+  if(!reduce) setInterval(()=>{ li = (li+1) % laps.length; showLap(); }, 2600);
+  else { li = 3; showLap(); }
+
+  // 5: lap counter
+  const moves = [...document.querySelectorAll('#moves span')], lapNum = document.getElementById('lapNum');
+  let step = 0, lap = 1;
+  function tick(){
+    moves.forEach((m,i)=>m.classList.toggle('on', i===step));
+    lapNum.textContent = String(lap).padStart(2,'0');
+    step++;
+    if(step===4){ step=0; lap = lap>=12 ? 1 : lap+1; }
+  }
+  tick();
+  if(!reduce) setInterval(tick, 900);
+</script>
+</body>
+</html>
