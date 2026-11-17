@@ -370,7 +370,7 @@
     { upTo: 3.3, text: '“Analysts lose days every month rebuilding the same report.”', blur: 1.1 },
     { upTo: 99,  text: '“Analysts don’t trust last month’s data, so they rebuild every report by hand.”', blur: 0 }
   ];
-  let shownText = stmt.textContent, swapTimer = null;
+  let shownText = stmt ? stmt.textContent : '', swapTimer = null;
 
   function render(L){
     L = Math.max(0, Math.min(LAPS, L));
