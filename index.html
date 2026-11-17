@@ -200,10 +200,6 @@
       <text class="goal halo-text" id="goal" x="0" y="50" text-anchor="middle">the big problem</text>
     </svg>
   </div>
-  <figure class="statement" aria-live="polite">
-    <figcaption><span id="stmtCap">The problem we're solving</span><span class="ok" id="stmtOk">Users would sign it</span></figcaption>
-    <p id="stmt">“Users want a better dashboard.”</p>
-  </figure>
 </aside>
 
 <main id="talk">
@@ -400,6 +396,7 @@
     bloom.style.setProperty('--bs', (0.42 + 0.68 * p).toFixed(3));
     bloom.style.setProperty('--bo', (0.28 + 0.62 * p).toFixed(3));
 
+    if (!stmt) return;
     const s = statements.find(s => L < s.upTo) || statements[statements.length - 1];
     const blur = started ? s.blur : 7;
     stmt.style.filter = blur ? 'blur(' + blur + 'px)' : 'none';
